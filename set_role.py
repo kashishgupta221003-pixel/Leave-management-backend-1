@@ -21,3 +21,4 @@ auth.set_custom_user_claims(uid, {"role": "manager"})
 
 
 print("Role assigned successfully!")
+# test
