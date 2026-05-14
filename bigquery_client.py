@@ -117,7 +117,7 @@ def get_employee_leaves(employee_id: str):
     WHERE employee_id = @employee_id AND is_deleted = False
     ORDER BY created_at DESC
     """
-
+    
     job_config = bigquery.QueryJobConfig(
         query_parameters=[
             bigquery.ScalarQueryParameter("employee_id", "STRING", employee_id),
@@ -125,7 +125,12 @@ def get_employee_leaves(employee_id: str):
     )
 
     results = client.query(query, job_config=job_config).result()
-    return [dict(row) for row in results]
+    # return [dict(row) for row in results]
+    rows = [dict(row) for row in results]
+
+    print("Leaves fetched from DB:", rows)   # ✅ This prints the actual table data
+
+    return rows
 
 def get_all_leaves():
     """Get all leaves (for managers)"""
@@ -136,7 +141,11 @@ def get_all_leaves():
     """
     
     results = client.query(query).result()
-    return [dict(row) for row in results]
+    rows = [dict(row) for row in results]
+
+    print("All leaves fetched from DB:", rows)   # ✅ This prints the actual table data
+
+    return rows
 
 def update_leave_status(leave_id: str, status: str):
     """Update leave request status"""
