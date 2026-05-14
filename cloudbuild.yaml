@@ -39,15 +39,27 @@ steps:
       - '$_REGION'
       - '--platform'
       - 'managed'
-      - '--allow-unauthenticated'
+      - '--no-allow-unauthenticated'
       - '--port'
       - '8080'
+
+  # Step 5: Allow unauthenticated access via explicit IAM binding
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gcloud beta run services add-iam-policy-binding \
+          --region=$_REGION \
+          --member=allUsers \
+          --role=roles/run.invoker \
+          $_SERVICE_NAME
 
 images:
   - '$_REGION-docker.pkg.dev/$PROJECT_ID/$_REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
 
 substitutions:
-  _REGION: us-central1
+  _REGION: us-east1
   _SERVICE_NAME: leave-management-backend
   _REPO_NAME: leave-management
 
